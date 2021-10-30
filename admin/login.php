@@ -7,29 +7,33 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="shortcut icon" href="images/logo.svg" type="image/x-icon" />
+    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon" />
 </head>
 
 <body>
-    <script src="" async defer></script>
+    <div class='image_area'>
+        <div style='padding: 10px;'>
+            <a href='contact.php' style="float: left; color: #fff; text-decoration: none; border: 1px solid #023e8a; background: #023e8a; padding: 10px; border-radius: 4px; font-family: Roboto-Medium;">Contact Us</a>
+        </div>
+    </div>
     <div class='login_area'>
         <br><br>
         <br><br>
-        <div style='padding: 60px;'>
-            <img src='images/logo.png' width="60px" style="float: left;"><br><br><br><br><br><br>
+        <div style='padding: 10px;'>
+        <center><img src='images/logo.png' width="200px"></center><br><br>
             <br><br><br><br>
             <f style="font-family: Roboto; font-size: 30px;">Welcome To Vadhuvuvarudu!</f><br><br>
             <?php
-            $uid = @$_POST['admin_email'];
-            $pwd = @$_POST['admin_password'];
+            $admin_email = @$_POST['admin_email'];
+            $admin_password = @$_POST['admin_password'];
             $error = "";
             if (isset($_POST['login'])) {
                 //Error Handlers
                 //Check if inputs are empty
-                if (empty($uid) || empty($pwd)) {
+                if (empty($admin_email) || empty($admin_password)) {
                     $error = "<br><f style='font-size: 14px; color: #ff2d2d; border: 1px solid #ff2d2d; padding: 10px;'>You Cannot Leave The Input Fields Empty!</f><br>";
                 } else {
-                    $sql = "SELECT * FROM admin WHERE admin_email='$uid'";
+                    $sql = "SELECT * FROM admin WHERE admin_email='$admin_email'";
                     $result = mysqli_query($conn, $sql);
                     $resultCheck = mysqli_num_rows($result);
                     if ($resultCheck < 1) {
@@ -40,7 +44,7 @@
                             $username_login = $row['admin_email'];
                             $password_login = $row['admin_password'];
                             //dehashing the password        
-                            if ($pwd == $password_login) {
+                            if ($admin_password == $password_login) {
                                 $_SESSION['id'] = $id_login;
                                 $_SESSION['admin_email'] = $username_login;
                                 $_SESSION['admin_password'] = $password_login;
@@ -56,17 +60,13 @@
             ?>
             <center><?php echo $error; ?></center>
             <form action="login.php" method="POST">
-                <input type="email" name="admin_email" placeholder="Userame" value="<?php echo $uid; ?>" class="input_styler">
-                <input type="password" name="admin_password" placeholder="Password" class="input_styler"><br><br>
-                <input type="submit" name="login" value="Login" class="submit_styler"><br><br>
+                <input type="email" name="admin_email" placeholder="E-mail" class="input_styler">
+                <input type="password" name="admin_password" placeholder="Password" class="input_styler">
+                <input type="submit" name="login" value="Login" class="submit_styler">
             </form>
 
         </div>
     </div>
-    <div class='image_area'>
-        <div style='padding: 40px;'>
-            <a href='contact.php' style="float: right; color: #fff; text-decoration: none; border: 1px solid #023e8a; background: #023e8a; padding: 10px; border-radius: 4px; font-family: Roboto-Medium;">Contact Us</a>
-        </div>
     </div>
 </body>
 

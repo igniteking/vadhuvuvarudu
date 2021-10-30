@@ -57,7 +57,7 @@ body {
   line-height: 1.5;
   color: #212529;
   text-align: left;
-  background-color: #fff; }
+ }
 
 [tabindex="-1"]:focus {
   outline: 0 !important; }
@@ -8215,7 +8215,7 @@ h1, h2, h3, h4, h5,
 #sidebar {
   min-width: 300px;
   max-width: 300px;
-  background: #1d1919;
+  background: #000;
   color: #fff;
   -webkit-transition: all 0.3s;
   -o-transition: all 0.3s;
@@ -8279,29 +8279,18 @@ a[data-toggle="collapse"] {
 
 .btn.btn-primary {
   background: #f8b739;
-  border-color: #f8b739; }
+  border-color: #000; }
   .btn.btn-primary:hover, .btn.btn-primary:focus {
-    background: #f8b739 !important;
-    border-color: #f8b739 !important; }
+    background: #000 !important;
+    border-color: #000 !important; }
 
 .footer p {
   color: rgba(255, 255, 255, 0.5); }
 
 
 
-
-  @import url(./fonts.css);
-* {
-  padding: 0px;
-  margin: 0px;
-  font-family: "Roboto";
-  font-size: 14px;
-}
-body {
-  background: #f1f1f1;
-}
 .login_area {
-  float: left;
+  float: right;
   width: 35%;
   height: 100%;
   background: #fff;
@@ -8332,12 +8321,13 @@ body {
   border-bottom: 1px solid #eee;
 }
 .image_area {
-  float: right;
+  float: left;
   width: 65%;
   height: 100%;
   background: url("../images/image.jpg");
   background-size: cover;
-  clip-path: polygon(6% 0, 100% 0%, 100% 100%, 0 100%);
+  background-repeat: no-repeat;
+  clip-path:  polygon(0 0, 90% 0%, 100% 100%, 0% 100%);
 }
 .input_styler {
   padding: 15px;

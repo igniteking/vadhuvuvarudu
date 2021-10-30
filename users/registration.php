@@ -1,56 +1,19 @@
-<!DOCTYPE html>
 <?php include_once("database/phpmyadmin/connection.php"); ?>
-<html lang="en">
-    <?php
-//Import PHPMailer classes into the global namespace
-                                        //These must be at the top of your script, not inside a function
-                                        use PHPMailer\PHPMailer\PHPMailer;
-                                        use PHPMailer\PHPMailer\SMTP;
-                                        use PHPMailer\PHPMailer\Exception;
-                                        ?>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register - GlowEdu</title>
-
-    <!-- Font Icon -->
-    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
-
-    <!-- Main css -->
-    <link rel="stylesheet" href="css/css/style.css">
-    <?php
-    if (isset($_SESSION['username'])) {
-        echo "<meta http-equiv=\"refresh\" content=\"0; url=index.php\">";
-        exit();
-    } else {
-    }
-    ?>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Vadhuvuvarudu - Register To Continue</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon" />
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <img src="images/logo.png" width="50px">
-            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fa fa-bars"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="registration.php">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.php">About Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.php">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <br>
     <?php
     $reg = @$_POST['reg'];
     $username = strip_tags(@$_POST['username']);
@@ -58,7 +21,15 @@
     $password = strip_tags(@$_POST['password']);
     $mobile = strip_tags(@$_POST['mobile']);
     $r_pswd = strip_tags(@$_POST['repeat-password']);
-    $date = date("Y-m-d");
+    $age = strip_tags(@$_POST['age']);
+    $caste = strip_tags(@$_POST['caste']);
+    $gender = strip_tags(@$_POST['gender']);
+    $state = strip_tags(@$_POST['state']);
+    $city = strip_tags(@$_POST['city']);
+    $date_of_birth = strip_tags(@$_POST['date_of_birth']);
+    $postalcode = strip_tags(@$_POST['pincode']);
+    $religion = strip_tags(@$_POST['religion']);
+    $maritial_status = strip_tags(@$_POST['maritial_status']);
     $vkey = md5(time() . $username);
     $randomNum = substr(str_shuffle("0123456789"), 0, 4);
     $mobile_otp = $randomNum;
@@ -78,39 +49,16 @@
                                 if (preg_match("/[a-z]/", $password)) {
                                     if (preg_match("/\W/", $password)) {
                                         $hashedPwd = password_hash($password, PASSWORD_DEFAULT);
-                                        mysqli_query($conn, "INSERT INTO users(`id`, `username`, `email`, `mobile`, `password`, `bio`, `date`, `active`, `token_key`, `user_type`, `mobile_otp`, `mobile_active`) VALUES (NULL, '$username','$email','$mobile', '$hashedPwd','','$date','0','$vkey', 'student', '$mobile_otp', '0')");
-                                        //Load Composer's autoloader
-                                        require 'vendor/autoload.php';
-                                        //Create an instance; passing `true` enables exceptions
-                                        $mail = new PHPMailer(true);
-                                                //Server settings
-                                                $mail->isSMTP();                                            //Send using SMTP
-                                                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                                                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                                                $mail->Username   = 'learn.glowedu@gmail.com';                     //SMTP username
-                                                $mail->Password   = 'Website@123';                               //SMTP password
-                                                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-                                                $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-                                            
-                                                //Recipients
-                                                $mail->setFrom('learn.glowedu@gmail.com', 'Mailer');
-                                                $mail->addAddress('khanzaidan786@gmail.com');               //Name is optional
-                                                $mail->addReplyTo('learn.glowedu@gmail.com', 'Information');
-                                                
-                                                //Content
-                                                $mail->isHTML(true);                                  //Set email format to HTML
-                                                $mail->Subject = 'Welcome To Learn GlowEDU';
-                                                $mail->Body = "Dear, $username  <br> This is to inform you that you are just one step away from a great learning experience.<br>
-                                        Click on the link below and verify your E-mail ID to complete your registration process with us. <br>
-                                        Link : <a href='http://learn.glowedu.co.in/verify.php?vkey=$vkey'>http://learn.glowedu.co.in/verify.php?vkey=$vkey</a><br>
-                                        Once done with the registration you will be able to access the course <br>
-                                        Regards,                                    <br>
-                                        Team Glowworm
-
-                                    </br></br> https://learn.glowedu.co.in";
-                                        $mail->AddAddress($email);
-                                        $mail->Send();
+                                        mysqli_query($conn, "INSERT INTO `users`(`id`, `username`, `gender`, `email`, `mobile`, `password`, 
+                                        `bio`, `date_of_birth`, `time_of_birth`, `city_of_birth`, `active`, `token_key`, `state`, `city`, `postalcode`,
+                                         `education`, `country`, `additional`, `profile_pic`, `mobile_otp`, `mobile_active`, `age`, `height`, 
+                                         `profession`, `parent_details`, `hobbies`, `expectations`, `caste`, `religion`, `maritial_status`, 
+                                         `brahmin_sect`, `subsect`, `gothra`, `nakshatra`, `rashi`, `income`, `disability`) VALUES (NULL,
+                                          '$username', '$gender' , '$email','$mobile', '$hashedPwd','','$date_of_birth','', '', '0','$vkey', '$state', '$city', '$postalcode',
+                                          '', '', '', '', '$mobile_otp', '0', '$age', '', '', '', '', '', '$caste', '$religion', '$maritial_status',
+                                           '', '', '', '', '', '', '')");
                                         echo "<meta http-equiv=\"refresh\" content=\"0; url=login.php?status=1\">";
+                                        echo "DONE";
                                     } else {
                                         echo "<div class='error-styler'><center>
                                         <p style='padding: 10px; margin: 10px; font-size: 14px; color: #fff; font-weight: 600; border-radius: 8px; text-align: center; background: #ff7474;'>Password should contain at least one special character!</p>;
@@ -136,80 +84,168 @@
                         <p style='padding: 10px; margin: 10px; font-size: 14px; color: #fff; font-weight: 600; border-radius: 8px; text-align: center; background: #ff7474;'>Both Password's Dont Match!</p>
             </center></div>";
                     }
-                }else {
+                } else {
                     echo "<div class='error-styler'><center>
                     <p style='padding: 10px; margin: 10px; font-size: 14px; color: #fff; font-weight: 600; border-radius: 8px; text-align: center; background: #ff7474;'>E-mail already exist!</p>
             </center></div>";
                 }
-                } else {
-                    echo "<div class='error-styler'><center>
-                    <p style='padding: 10px; margin: 10px; font-size: 14px; color: #fff; font-weight: 600; border-radius: 8px; text-align: center; background: #ff7474;'>Username already exist!</p>
-            </center></div>";
-                }
             } else {
                 echo "<div class='error-styler'><center>
-                <p style='padding: 10px; margin: 10px; font-size: 14px; color: #fff; font-weight: 600; border-radius: 8px; text-align: center; background: #ff7474;'>Please Fill In All Fields!</p>
+                    <p style='padding: 10px; margin: 10px; font-size: 14px; color: #fff; font-weight: 600; border-radius: 8px; text-align: center; background: #ff7474;'>Username already exist!</p>
             </center></div>";
             }
+        } else {
+            echo "<div class='error-styler'><center>
+                <p style='padding: 10px; margin: 10px; font-size: 14px; color: #fff; font-weight: 600; border-radius: 8px; text-align: center; background: #ff7474;'>Please Fill In All Fields!</p>
+            </center></div>";
         }
-        ?>
+    }
+    ?>
+    <div class="row g-0">
+        <div class="col-xl-6 d-none d-xl-block">
+            <img src="images/image.jpg" alt="Sample photo" class="img-fluid" style="border-bottom-right-radius: 700px; width: 100%; height: 100%;" />
+        </div>
+        <div class="col-xl-6">
+            <div class="card-body p-md-5 text-black">
+                <h3 class="mb-5">
+                    <img src='images/logo.png' width="100px">
+                    <f style="font-family: Roboto;">Welcome To Vadhuvuvarudu!</f>
+                </h3>
 
+                <form action="registration.php" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <input type="text" id="form3Example1m" name="username" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1m">User name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <input type="email" id="form3Example1n" name="email" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1n">E-mail</label>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="one" style="margin-top: 3%;">
-        <!-- Sign up form -->
-        <section class="signup">
-            <div class="container">
-                <div class="signup-content">
-                    <div class="signup-form">
-                        <h2 class="form-title">Register</h2>
-                        <form method="POST" action='registration.php' class="register-form" id="register-form">
-                            <div class="form-group">
-                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="username" id="name" placeholder="Your Name" />
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <input type="password" id="form3Example1m1" name="password" class="form-control form-control-lg" />
+                                Password should contain at least one special character and one number atleast!
                             </div>
-                            <div class="form-group">
-                                <label for="email"><i class="zmdi zmdi-email"></i></label>
-                                <input type="email" name="email" id="email" placeholder="Your Email" />
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <input type="password" id="form3Example1n1" name="repeat-password" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1n1">Re-Type Password</label>
                             </div>
-                            <div class="form-group">
-                                <label for="mobile"><i class="zmdi zmdi-phone"></i></label>
-                                <input type="tel" name="mobile" id="mobile" placeholder="Mobile" />
-                            </div>
-                            <div class="form-group">
-                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input type="password" name="password" id="pass" placeholder="Password" />
-                            </div>
-                            <span><b>Password should contain atleast one Upper case letter </b></span><br>
-                            <div class="form-group">
-                                <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
-                                <input type="password" name="repeat-password" id="re_pass" placeholder="Repeat your password" />
-                            </div>
-                            <div class="form-group">
-                                <label for="agree-term" class="label-agree-term"><span><span></span></span><b>By registering you will be agreeing all statements in <a href="tandc.php" style="color: blue;" class="term-service">Terms of service</a></b></label>
-                            </div>
-                            <div class="form-group form-button">
-                                <input type="submit" name="reg" id="signup" class="form-submit" value="Register" />
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                    <div class="signup-image">
-                        <figure><img src="images/join.svg" alt="sing up image"></figure>
-                        <b><a href="login.php" style="color: blue;" class="signup-image-link">I am already member</a></b>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <input type="number" id="form3Example1m1" name="mobile" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1m1">Mobile Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <input type="number" id="form3Example1n1" name="age" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1n1">Age</label>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form3Example8" name="caste" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example8">Caste</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <select class="form-select" aria-label="Default select example" name="gender">
+                                <option selected>Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <input type="text" id="form3Example1m1" name="state" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1m1">State</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <input type="text" id="form3Example1n1" name="city" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1n1">City</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="date" id="form3Example9" name="date_of_birth" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example9">Date Of Birth</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="number" id="form3Example90" name="pincode" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example90">Pincode</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form3Example99" name="religion" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example99">Religion</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form3Example97" name="maritial_status" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example97">Maritial Status</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <p style="font-size: 14px;">By Registering you will be accepting our Terms And Conditions!</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <input type="submit" class="btn btn-success btn-lg" style="width: 100%;" name="reg"></button>
+                        </div>
+                        
+                    </div>
+                </form>
+                <a href="login.php" ><Button class="submit_styler">Go to Login</button></a>
             </div>
-        </section>
+        </div>
     </div>
-    <center>
-        <p style="margin-top:-60px; font-size: 13.5px; color: #555;">&copy; 2021 Learn GlowEDU</p>
-    </center>
-    <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-    <!-- JS -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        input[type="text"] {
+            height: 40px;
+        }
+
+        .card-registration .select-input.form-control[readonly]:not([disabled]) {
+            font-size: 1rem;
+            line-height: 2.15;
+        }
+
+        .card-registration .select-arrow {
+            top: 13px;
+        }
+    </style>
+    </div>
 </body>
 
 </html>

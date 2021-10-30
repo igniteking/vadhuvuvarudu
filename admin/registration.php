@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 <?php include_once("database/phpmyadmin/connection.php"); ?>
+<!DOCTYPE html>
 <html lang="en">
     <?php
 //Import PHPMailer classes into the global namespace
